@@ -1,7 +1,9 @@
 package br.com.simplepass.locationprogressbarlib;
 
+import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Animatable;
 import android.util.AttributeSet;
@@ -13,7 +15,7 @@ import android.widget.ProgressBar;
  * Created by hinovamobile on 03/10/16.
  */
 public class LocationProgressBar extends ProgressBar{
-    LocationProgressDrawable mProgressDrawable;
+    private LocationProgressDrawable mLocationProgressDrawable;
 
     public LocationProgressBar(Context context) {
         super(context);
@@ -41,21 +43,32 @@ public class LocationProgressBar extends ProgressBar{
 
         setMax(100);
         setIndeterminate(false);
-
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        if(mLocationProgressDrawable != null) {
+            mLocationProgressDrawable.draw(canvas);
+        }
     }
 
     public void animateProgress(int from, int to){
         setProgress(from);
 
+        mLocationProgressDrawable = new LocationProgressDrawable(
+                BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher),
+                this,
+                from,
+                to,
+                300);
+
+        mLocationProgressDrawable.setCallback(this);
+
         ValueAnimator valueAnimator = ValueAnimator.ofInt(from, to);
         valueAnimator.setDuration(300);
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-
 
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -67,6 +80,8 @@ public class LocationProgressBar extends ProgressBar{
         });
 
         valueAnimator.start();
+        mLocationProgressDrawable.start();
+
     }
 
 }
