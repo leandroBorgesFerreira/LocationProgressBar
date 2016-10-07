@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ProgressBar;
 
 /**
@@ -97,6 +98,7 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
     public void start(int from, int to, int duration){
         mValueAnimator = ValueAnimator.ofInt(from, to);
         mValueAnimator.setDuration(duration);
+        mValueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
         mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
