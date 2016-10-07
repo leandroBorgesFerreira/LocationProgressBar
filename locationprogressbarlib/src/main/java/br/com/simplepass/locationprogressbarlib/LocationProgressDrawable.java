@@ -12,7 +12,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 
 /**
@@ -22,33 +21,21 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
 
     private Paint mPaintPoint;
     private Bitmap mPointImage;
-
     private ProgressBar mProgressBar;
-
+    private float mProgressCorrectionFactor;
     ValueAnimator mValueAnimator;
 
 
-    public LocationProgressDrawable(Bitmap bitmap, ProgressBar progressBar, int from, int to, int duration) {
+    public LocationProgressDrawable(Bitmap bitmap, ProgressBar progressBar) {
         mPaintPoint = new Paint();
         mPaintPoint.setAntiAlias(true);
         mPaintPoint.setStyle(Paint.Style.FILL);
         mPaintPoint.setColor(Color.BLACK);
 
-        Rect rect = getBounds();
 
         mProgressBar = progressBar;
 
         mPointImage = bitmap;
-
-        mValueAnimator = ValueAnimator.ofInt(from, to);
-        mValueAnimator.setDuration(duration);
-
-        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                invalidateSelf();
-            }
-        });
     }
 
     @Override
@@ -59,8 +46,8 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
 
     @Override
     public void draw(Canvas canvas) {
-        Log.d("Draw", "Está desenhando");
-        canvas.drawBitmap(mPointImage, mProgressBar.getProgress(), 0, mPaintPoint);
+        Log.d("Draw", "Está desenhando. Progresso:  " + mProgressBar.getProgress());
+        canvas.drawBitmap(mPointImage, mProgressBar.getProgress() * mProgressCorrectionFactor, 0, mPaintPoint);
     }
 
     @Override
@@ -91,6 +78,22 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
     @Override
     public boolean isRunning() {
         return mValueAnimator.isRunning();
+    }
+
+    public void start(int from, int to, int duration){
+        mValueAnimator = ValueAnimator.ofInt(from, to);
+        mValueAnimator.setDuration(duration);
+
+        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                invalidateSelf();
+            }
+        });
+
+        mProgressCorrectionFactor = mProgressBar.getWidth()/mProgressBar.getMax();
+
+        start();
     }
 }
 
