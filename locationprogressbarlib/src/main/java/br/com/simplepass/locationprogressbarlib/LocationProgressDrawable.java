@@ -32,10 +32,10 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
         mPaintPoint.setStyle(Paint.Style.FILL);
         mPaintPoint.setColor(Color.BLACK);
 
-
         mProgressBar = progressBar;
 
-        mPointImage = bitmap;
+        mPointImage = Bitmap.createScaledBitmap(bitmap, 100, 100, false);
+        //mPointImage = bitmap;
     }
 
     @Override
@@ -47,7 +47,21 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
     @Override
     public void draw(Canvas canvas) {
         Log.d("Draw", "Está desenhando. Progresso:  " + mProgressBar.getProgress());
-        canvas.drawBitmap(mPointImage, mProgressBar.getProgress() * mProgressCorrectionFactor, 0, mPaintPoint);
+        float width = (mProgressBar.getProgress() * mProgressCorrectionFactor) - mPointImage.getWidth()/2;
+
+        Log.d("Draw", "Está desenhando. Width:  " + width);
+        Log.d("Draw", "Está desenhando. Width sem correcao:  " + (mProgressBar.getProgress() * mProgressCorrectionFactor));
+
+
+        canvas.drawBitmap(mPointImage,
+                width,
+                //-mPointImage.getHeight()/2 -15,
+                mProgressBar.getHeight()/2 - mPointImage.getHeight(),
+                //0,
+                mPaintPoint);
+
+        Log.d("Draw", "Está desenhando. Height PB:  " + mProgressBar.getHeight());
+        Log.d("Draw", "Está desenhando. Height IMAGE:  " + mPointImage.getHeight());
     }
 
     @Override
@@ -91,7 +105,7 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
             }
         });
 
-        mProgressCorrectionFactor = mProgressBar.getWidth()/mProgressBar.getMax();
+        mProgressCorrectionFactor = (float) mProgressBar.getWidth()/mProgressBar.getMax();
 
         start();
     }

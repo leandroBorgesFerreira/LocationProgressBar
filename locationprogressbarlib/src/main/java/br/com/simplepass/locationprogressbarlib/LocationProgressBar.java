@@ -45,7 +45,7 @@ public class LocationProgressBar extends ProgressBar{
         setIndeterminate(false);
 
         mLocationProgressDrawable = new LocationProgressDrawable(
-                BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher),
+                BitmapFactory.decodeResource(getResources(), R.drawable.ic_place),
                 this);
 
         mLocationProgressDrawable.setCallback(this);
@@ -53,20 +53,17 @@ public class LocationProgressBar extends ProgressBar{
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.d("ProgressBar", "onDrawProgressBar");
+        Log.d("ProgressBar", "onDrawProgressBar: " + getProgress());
 
         super.onDraw(canvas);
-
-        if(mLocationProgressDrawable != null) {
-            mLocationProgressDrawable.draw(canvas);
-        }
+        mLocationProgressDrawable.draw(canvas);
     }
 
     public void animateProgress(int from, int to){
         setProgress(from);
 
         ValueAnimator valueAnimator = ValueAnimator.ofInt(from, to);
-        valueAnimator.setDuration(300);
+        valueAnimator.setDuration(500);
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -79,7 +76,7 @@ public class LocationProgressBar extends ProgressBar{
         });
 
         valueAnimator.start();
-        mLocationProgressDrawable.start(from, to, 300);
+        mLocationProgressDrawable.start(from, to, 500);
 
     }
 
