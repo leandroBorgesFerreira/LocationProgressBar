@@ -38,9 +38,6 @@ public class LocationProgressBar extends ProgressBar{
     }
 
     private void init(){
-        /*mProgressDrawable = new LocationProgressDrawable(this);
-        mProgressDrawable.setCallback(this);*/
-
         setMax(100);
         setIndeterminate(false);
 

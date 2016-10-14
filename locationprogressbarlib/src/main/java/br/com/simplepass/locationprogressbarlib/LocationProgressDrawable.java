@@ -1,7 +1,5 @@
 package br.com.simplepass.locationprogressbarlib;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -24,7 +22,7 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
     private Bitmap mPointImage;
     private ProgressBar mProgressBar;
     private float mProgressCorrectionFactor;
-    ValueAnimator mValueAnimator;
+    private ValueAnimator mValueAnimator;
 
 
     public LocationProgressDrawable(Bitmap bitmap, ProgressBar progressBar) {
@@ -42,27 +40,18 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
     @Override
     protected void onBoundsChange(Rect bounds) {
         super.onBoundsChange(bounds);
-
     }
 
     @Override
     public void draw(Canvas canvas) {
-        Log.d("Draw", "Está desenhando. Progresso:  " + mProgressBar.getProgress());
         float width = (mProgressBar.getProgress() * mProgressCorrectionFactor) - mPointImage.getWidth()/2;
 
-        Log.d("Draw", "Está desenhando. Width:  " + width);
-        Log.d("Draw", "Está desenhando. Width sem correcao:  " + (mProgressBar.getProgress() * mProgressCorrectionFactor));
-
-
         canvas.drawBitmap(mPointImage,
-                width,
+                width + mProgressBar.getPaddingLeft(),
                 //-mPointImage.getHeight()/2 -15,
                 mProgressBar.getHeight()/2 - mPointImage.getHeight(),
                 //0,
                 mPaintPoint);
-
-        Log.d("Draw", "Está desenhando. Height PB:  " + mProgressBar.getHeight());
-        Log.d("Draw", "Está desenhando. Height IMAGE:  " + mPointImage.getHeight());
     }
 
     @Override
@@ -107,7 +96,10 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
             }
         });
 
-        mProgressCorrectionFactor = (float) mProgressBar.getWidth()/mProgressBar.getMax();
+        mProgressCorrectionFactor = (float) (mProgressBar.getWidth() -
+                mProgressBar.getPaddingLeft() -
+                mProgressBar.getPaddingRight()) /
+                mProgressBar.getMax();
 
         start();
     }
