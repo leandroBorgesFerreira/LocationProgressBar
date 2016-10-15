@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">locationProgressBarLib</string>
+
+    <string name="format_percetagem">%s%%</string>
 </resources>

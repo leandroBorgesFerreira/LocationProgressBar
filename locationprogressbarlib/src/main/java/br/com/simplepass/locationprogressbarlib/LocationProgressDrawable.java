@@ -30,10 +30,12 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
         mPaintPoint.setAntiAlias(true);
         mPaintPoint.setStyle(Paint.Style.FILL);
         mPaintPoint.setColor(Color.BLACK);
+        mPaintPoint.setTextSize(50);
+
 
         mProgressBar = progressBar;
 
-        mPointImage = Bitmap.createScaledBitmap(bitmap, 100, 100, false);
+        mPointImage = Bitmap.createScaledBitmap(bitmap, 120, 120, false);
         //mPointImage = bitmap;
     }
 
@@ -51,6 +53,10 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
                 //-mPointImage.getHeight()/2 -15,
                 mProgressBar.getHeight()/2 - mPointImage.getHeight(),
                 //0,
+                mPaintPoint);
+        canvas.drawText(String.format(mProgressBar.getContext().getString(R.string.format_percetagem), String.valueOf(mProgressBar.getProgress())),
+                width + mProgressBar.getPaddingLeft() + mPointImage.getWidth()/4,
+                mProgressBar.getHeight()/2 - mPointImage.getHeight(),
                 mPaintPoint);
     }
 
