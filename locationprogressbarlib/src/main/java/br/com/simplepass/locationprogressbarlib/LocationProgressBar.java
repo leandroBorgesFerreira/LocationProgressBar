@@ -1,39 +1,59 @@
 package br.com.simplepass.locationprogressbarlib;
 
-import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.drawable.Animatable;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ProgressBar;
 
 /**
- * Created by hinovamobile on 03/10/16.
+ * Created by Leandro Ferreira on 03/10/16.
+ *
+ * This class is a extention of ProgressBar. It animation and it is make for a progress of location.
  */
 public class LocationProgressBar extends ProgressBar{
     private LocationProgressDrawable mLocationProgressDrawable;
 
+    /**
+     *
+     * @param context
+     */
     public LocationProgressBar(Context context) {
         super(context);
         init();
     }
 
+    /**
+     *
+     * @param context
+     * @param attrs
+     */
     public LocationProgressBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
+    /**
+     *
+     * @param context
+     * @param attrs
+     * @param defStyleAttr
+     */
     public LocationProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
+    /**
+     *
+     * @param context
+     * @param attrs
+     * @param defStyleAttr
+     * @param defStyleRes
+     */
     @TargetApi(23)
     public LocationProgressBar(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
@@ -41,6 +61,9 @@ public class LocationProgressBar extends ProgressBar{
         init();
     }
 
+    /**
+     * Commom initiation method of all constructors.
+     */
     private void init(){
         setMax(100);
         setIndeterminate(false);
@@ -52,12 +75,23 @@ public class LocationProgressBar extends ProgressBar{
         mLocationProgressDrawable.setCallback(this);
     }
 
+    /**
+     * Method called when the animation is going to be draw in the progress bar and all its dependencies.
+     *
+     * @param canvas
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         mLocationProgressDrawable.draw(canvas);
     }
 
+    /**
+     * Main method. You must call this method to animate the progress of the progress bar.
+     *
+     * @param from The starting value of the progress bar. From 0-100.
+     * @param to The final value of the progress bar, after the animation. From 0-100.
+     */
     public void animateProgress(int from, int to){
         setProgress(from);
 
@@ -75,7 +109,7 @@ public class LocationProgressBar extends ProgressBar{
         });
 
         valueAnimator.start();
-        mLocationProgressDrawable.start(from, to, 500);
+        mLocationProgressDrawable.startConfigAndStart(from, to, 500);
 
     }
 

@@ -15,7 +15,9 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ProgressBar;
 
 /**
- * Created by hinovamobile on 03/10/16.
+ * Created by Leandro Ferreira on 03/10/16.
+ *
+ * Drawable responsible for the animations of the Custom View
  */
 public class LocationProgressDrawable extends Drawable implements Animatable {
 
@@ -25,7 +27,10 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
     private float mProgressCorrectionFactor;
     private ValueAnimator mValueAnimator;
 
-
+    /**
+     * @param bitmap The mapPoint image, passed as a Bitmap.
+     * @param progressBar The progress bar to be animated
+     */
     public LocationProgressDrawable(Bitmap bitmap, ProgressBar progressBar) {
         mPaintPoint = new Paint();
         mPaintPoint.setAntiAlias(true);
@@ -40,11 +45,18 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
         //mPointImage = bitmap;
     }
 
+
     @Override
     protected void onBoundsChange(Rect bounds) {
         super.onBoundsChange(bounds);
     }
 
+    /**
+     * Method call when the animation is going to be drawn. It update de mapPoint position and the
+     * text of the view
+     *
+     * @param canvas
+     */
     @Override
     public void draw(Canvas canvas) {
         float width = (mProgressBar.getProgress() * mProgressCorrectionFactor) - mPointImage.getWidth()/2;
@@ -61,14 +73,13 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
                 mPaintPoint);
     }
 
+
     @Override
     public void setAlpha(int i) {
-
     }
 
     @Override
     public void setColorFilter(ColorFilter colorFilter) {
-
     }
 
     @Override
@@ -76,11 +87,17 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
         return PixelFormat.OPAQUE;
     }
 
+    /**
+     * Starts the animation
+     */
     @Override
     public void start() {
         mValueAnimator.start();
     }
 
+    /**
+     * Stops the animation
+     */
     @Override
     public void stop() {
         mValueAnimator.cancel();
@@ -91,7 +108,14 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
         return mValueAnimator.isRunning();
     }
 
-    public void start(int from, int to, int duration){
+    /**
+     * Main method. Call this method to animate this drawable
+     *
+     * @param from The starting value of the progress bar. From 0-100.
+     * @param to The final value of the progress bar, after the animation. From 0-100.
+     * @param duration Duration of te animation
+     */
+    public void startConfigAndStart(int from, int to, int duration){
         mValueAnimator = ValueAnimator.ofInt(from, to);
         mValueAnimator.setDuration(duration);
         mValueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());

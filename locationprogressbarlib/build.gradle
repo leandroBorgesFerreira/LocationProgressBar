@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 ext {
     PUBLISH_GROUP_ID='br.com.simplepass'
     PUBLISH_ARTIFACT_ID='location-progress-bar'
-    PUBLISH_VERSION='0.8.0'
+    PUBLISH_VERSION='0.8.1'
 }
 
 
