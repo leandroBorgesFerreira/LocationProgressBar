@@ -2,10 +2,12 @@ package br.com.simplepass.locationprogressbarlib;
 
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Animatable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -32,8 +34,10 @@ public class LocationProgressBar extends ProgressBar{
         init();
     }
 
+    @TargetApi(23)
     public LocationProgressBar(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+
         init();
     }
 
@@ -50,8 +54,6 @@ public class LocationProgressBar extends ProgressBar{
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.d("ProgressBar", "onDrawProgressBar: " + getProgress());
-
         super.onDraw(canvas);
         mLocationProgressDrawable.draw(canvas);
     }
