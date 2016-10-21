@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_start)
     protected void startAnimation(){
-        locationProgressBar.animateProgress(locationProgressBar.getProgress(),
-                locationProgressBar.getProgress()+30);
+        locationProgressBar.animateProgress(0, 100, 800);
     }
 }

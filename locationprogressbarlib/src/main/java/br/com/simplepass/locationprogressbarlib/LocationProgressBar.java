@@ -91,12 +91,13 @@ public class LocationProgressBar extends ProgressBar{
      *
      * @param from The starting value of the progress bar. From 0-100.
      * @param to The final value of the progress bar, after the animation. From 0-100.
+     * @param durationMilis duration of the animation
      */
-    public void animateProgress(int from, int to){
+    public void animateProgress(int from, int to, int durationMilis){
         setProgress(from);
 
         ValueAnimator valueAnimator = ValueAnimator.ofInt(from, to);
-        valueAnimator.setDuration(500);
+        valueAnimator.setDuration(durationMilis);
         valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
 
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -109,8 +110,18 @@ public class LocationProgressBar extends ProgressBar{
         });
 
         valueAnimator.start();
-        mLocationProgressDrawable.startConfigAndStart(from, to, 500);
+        mLocationProgressDrawable.startConfigAndStart(from, to, durationMilis);
 
+    }
+
+    /**
+     * Main method. You must call this method to animate the progress of the progress bar.
+     *
+     * @param from The starting value of the progress bar. From 0-100.
+     * @param to The final value of the progress bar, after the animation. From 0-100.
+     */
+    public void animateProgress(int from, int to){
+        animateProgress(from, to, 500);
     }
 
 }
