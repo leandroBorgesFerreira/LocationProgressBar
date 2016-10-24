@@ -28,10 +28,10 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.btn_start)
     protected void startAnimation(){
         LocationProgressBar.AnimationConfig animationConfig = new LocationProgressBar.AnimationConfig(
-                0,
-                100,
-                800,
-                600);
+                0, //From progress
+                100, //To progress
+                800, // Duration
+                600); //Start delay
 
         locationProgressBar.configAnimation(animationConfig);
         locationProgressBar.animateProgress();

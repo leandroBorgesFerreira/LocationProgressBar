@@ -5,6 +5,17 @@ Custom Android Progress Bar with some animations
 
 .![enter image description here](https://lh3.googleusercontent.com/-kVgciOL3a-I/WAormd0DClI/AAAAAAAAKUs/FgsO51cMx2Q34TSw0c7vyZ6EyRsWNLLRgCLcB/s0/loadingprogressbar.gif "loadingprogressbar.gif")
 
+##Usage
+
+    LocationProgressBar.AnimationConfig animationConfig = new LocationProgressBar.AnimationConfig(
+                0, //From progress
+                100, //To progress
+                800, // Duration
+                600); //Start delay
+
+        locationProgressBar.configAnimation(animationConfig);
+        locationProgressBar.animateProgress();
+
 ##Install
 
     compile 'br.com.simplepass:location-progress-bar:0.8.1'
