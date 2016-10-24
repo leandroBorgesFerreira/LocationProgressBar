@@ -1,8 +1,10 @@
 package br.com.simplepass.locationprogressbar;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
+
 
 import br.com.simplepass.locationprogressbarlib.LocationProgressBar;
 import butterknife.BindView;
@@ -19,10 +21,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+        startAnimation();
     }
 
     @OnClick(R.id.btn_start)
     protected void startAnimation(){
-        locationProgressBar.animateProgress(0, 100, 800);
+        LocationProgressBar.AnimationConfig animationConfig = new LocationProgressBar.AnimationConfig(
+                0,
+                100,
+                800,
+                600);
+
+        locationProgressBar.configAnimation(animationConfig);
+        locationProgressBar.animateProgress();
     }
 }

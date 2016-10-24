@@ -1,10 +1,12 @@
 package br.com.simplepass.locationprogressbarlib;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ProgressBar;
@@ -16,6 +18,8 @@ import android.widget.ProgressBar;
  */
 public class LocationProgressBar extends ProgressBar{
     private LocationProgressDrawable mLocationProgressDrawable;
+    private ValueAnimator mValueAnimator;
+    private AnimationConfig mAnimationConfig;
 
     /**
      *
@@ -67,12 +71,42 @@ public class LocationProgressBar extends ProgressBar{
     private void init(){
         setMax(100);
         setIndeterminate(false);
+    }
 
-        mLocationProgressDrawable = new LocationProgressDrawable(
-                BitmapFactory.decodeResource(getResources(), R.drawable.ic_place),
-                this);
 
-        mLocationProgressDrawable.setCallback(this);
+
+    /**
+     * Method to config the animation
+     *
+     * @param animationConfig Data holder of all the animation params
+     */
+    public void configAnimation(AnimationConfig animationConfig){
+        if(animationConfig == null || animationConfig.durationMilis == 0){
+            throw new IllegalStateException("Wrong AnimationConfig");
+        }
+
+        mAnimationConfig = animationConfig;
+
+        setProgress(animationConfig.from);
+
+        mValueAnimator = ValueAnimator.ofInt(animationConfig.from, animationConfig.to);
+        mValueAnimator.setDuration(animationConfig.durationMilis);
+        mValueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int value = (int) valueAnimator.getAnimatedValue();
+                setProgress(value);
+                invalidate();
+            }
+        });
+
+        if(animationConfig.startDelay != 0){
+            mValueAnimator.setStartDelay(animationConfig.startDelay);
+        } else{
+            mValueAnimator.setStartDelay(AnimationConfig.DEFAULT_START_DELAY_MILLIS);
+        }
     }
 
     /**
@@ -83,45 +117,71 @@ public class LocationProgressBar extends ProgressBar{
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        if(mLocationProgressDrawable == null) {
+            mLocationProgressDrawable = new LocationProgressDrawable(
+                    BitmapFactory.decodeResource(getResources(), R.drawable.ic_place),
+                    this);
+            mLocationProgressDrawable.configAnimation(mAnimationConfig);
+            mLocationProgressDrawable.setCallback(this);
+        }
+
         mLocationProgressDrawable.draw(canvas);
     }
 
     /**
      * Main method. You must call this method to animate the progress of the progress bar.
      *
-     * @param from The starting value of the progress bar. From 0-100.
-     * @param to The final value of the progress bar, after the animation. From 0-100.
-     * @param durationMilis duration of the animation
      */
-    public void animateProgress(int from, int to, int durationMilis){
-        setProgress(from);
-
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(from, to);
-        valueAnimator.setDuration(durationMilis);
-        valueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                int value = (int) valueAnimator.getAnimatedValue();
-                setProgress(value);
-                invalidate();
-            }
-        });
-
-        valueAnimator.start();
-        mLocationProgressDrawable.startConfigAndStart(from, to, durationMilis);
-
+    public void animateProgress(){
+        mValueAnimator.start();
     }
 
-    /**
-     * Main method. You must call this method to animate the progress of the progress bar.
-     *
-     * @param from The starting value of the progress bar. From 0-100.
-     * @param to The final value of the progress bar, after the animation. From 0-100.
-     */
-    public void animateProgress(int from, int to){
-        animateProgress(from, to, 500);
+    public static class AnimationConfig{
+        private int from, to, durationMilis, startDelay;
+
+        public static final int DEFAULT_START_DELAY_MILLIS = 600;
+
+        public AnimationConfig() {}
+
+        public AnimationConfig(int from, int to, int durationMilis, int startDelay) {
+            this.from = from;
+            this.to = to;
+            this.durationMilis = durationMilis;
+            this.startDelay = startDelay;
+        }
+
+        public int getFrom() {
+            return from;
+        }
+
+        public void setFrom(int from) {
+            this.from = from;
+        }
+
+        public int getTo() {
+            return to;
+        }
+
+        public void setTo(int to) {
+            this.to = to;
+        }
+
+        public int getDurationMilis() {
+            return durationMilis;
+        }
+
+        public void setDurationMilis(int durationMilis) {
+            this.durationMilis = durationMilis;
+        }
+
+        public int getStartDelay() {
+            return startDelay;
+        }
+
+        public void setStartDelay(int startDelay) {
+            this.startDelay = startDelay;
+        }
     }
 
 }

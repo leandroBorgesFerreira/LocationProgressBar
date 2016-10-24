@@ -92,6 +92,10 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
      */
     @Override
     public void start() {
+        if(mValueAnimator == null) {
+            throw new IllegalStateException("You must first call configAnimation(int from, int to, int duration)!");
+        }
+
         mValueAnimator.start();
     }
 
@@ -109,16 +113,20 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
     }
 
     /**
-     * Main method. Call this method to animate this drawable
+     * Method to config the animation
      *
-     * @param from The starting value of the progress bar. From 0-100.
-     * @param to The final value of the progress bar, after the animation. From 0-100.
-     * @param duration Duration of te animation
+     * @param animationConfig Data holder of all the animation params
      */
-    public void startConfigAndStart(int from, int to, int duration){
-        mValueAnimator = ValueAnimator.ofInt(from, to);
-        mValueAnimator.setDuration(duration);
+    public void configAnimation(LocationProgressBar.AnimationConfig animationConfig){
+        mValueAnimator = ValueAnimator.ofInt(animationConfig.getFrom(), animationConfig.getTo());
+        mValueAnimator.setDuration(animationConfig.getDurationMilis());
         mValueAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        if(animationConfig.getStartDelay() != 0){
+            mValueAnimator.setStartDelay(animationConfig.getStartDelay());
+        } else{
+            mValueAnimator.setStartDelay(LocationProgressBar.AnimationConfig.DEFAULT_START_DELAY_MILLIS);
+        }
 
         mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -127,12 +135,14 @@ public class LocationProgressDrawable extends Drawable implements Animatable {
             }
         });
 
+        calculateCorrectionFactor();
+    }
+
+    public void calculateCorrectionFactor(){
         mProgressCorrectionFactor = (float) (mProgressBar.getWidth() -
                 mProgressBar.getPaddingLeft() -
                 mProgressBar.getPaddingRight()) /
                 mProgressBar.getMax();
-
-        start();
     }
 }
 
