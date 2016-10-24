@@ -18,7 +18,7 @@ Custom Android Progress Bar with some animations
 
 ##Install
 
-    compile 'br.com.simplepass:location-progress-bar:0.8.1'
+    compile 'br.com.simplepass:location-progress-bar:0.8.2'
 
 ##License
 
