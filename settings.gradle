@@ -1,1 +1,1 @@
-include ':app', ':locationprogressbarlib'
+include ':app', ':location-progress-bar'

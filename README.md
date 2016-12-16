@@ -1,5 +1,5 @@
 
-
+[ ![Download](https://api.bintray.com/packages/lehen01/maven/LocationProgressBar/images/download.svg) ](https://bintray.com/lehen01/maven/LocationProgressBar/_latestVersion) [![Build Status](https://travis-ci.org/leandroBorgesFerreira/LocationProgressBar.svg?branch=master)](https://travis-ci.org/leandroBorgesFerreira/LocationProgressBar)
 ## Location Progress Bar
 Custom Android Progress Bar with some animations
 
